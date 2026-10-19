@@ -4,13 +4,12 @@ API RESTful para gestionar los turnos de una manicuría: las clientas se registr
 
 Trabajo Práctico Integrador – Back End (Ada ITW).
 
-**Integrantes:** Lourdes Torres Ramonell – _(completar el email; si el trabajo es grupal, agregar nombre y email de cada integrante)_
-
+**Integrantes:** Lourdes Torres Ramonell – luli2000cuenta2.0@gmail.com
 | | |
 |---|---|
-| **API desplegada (Render)** | _(pegar acá la URL de Render cuando esté publicada)_ |
-| **Repositorio** | _(pegar acá el link de GitHub)_ |
-| **Documentación de la API** | [Endpoints](#endpoints) · [Colección de Postman](postman/manicuria-api.postman_collection.json) · _(opcional: link a la documentación publicada en Postman)_ |
+| **API desplegada (Render)** |https://manicuria-api.onrender.com/publicada |
+| **Repositorio** | https://github.com/LourdesTorresRamonell/manicuria-api_ |
+| **Documentación de la API** | [Endpoints](#endpoints) · [Colección de Postman](postman/manicuria-api.postman_collection.json) |
 
 ---
 
@@ -121,7 +120,6 @@ Para generar un `JWT_SECRET`:
 node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
 ```
 
-> ⚠️ El archivo `.env` está en el `.gitignore`: nunca lo subas al repositorio. Subí solo `.env.example`.
 
 ### 4. Ejecutar
 
@@ -335,8 +333,8 @@ Al abrir `http://localhost:3000` se puede crear una cuenta, iniciar sesión, ver
 
 El logo que aparece es de ejemplo. Se usa en tres lugares: el encabezado, la pantalla de ingreso y el ícono de la pestaña del navegador. Para poner el tuyo:
 
-1. Reemplazá el archivo `public/logo.svg` por el tuyo con el mismo nombre; o
-2. si es un PNG o JPG, copialo en `public/` y cambiá `logo.svg` por tu archivo en las dos etiquetas `<img>` y en el `<link rel="icon">` de `public/index.html`.
+1. Reemplazá el archivo `public/logo.png` por el tuyo con el mismo nombre; o
+2. si es un PNG o JPG, copialo en `public/` y cambiá `logo.png` por tu archivo en las dos etiquetas `<img>` y en el `<link rel="icon">` de `public/index.html`.
 
 Una imagen cuadrada (de unos 256 × 256 px) es lo que mejor se ve.
 
