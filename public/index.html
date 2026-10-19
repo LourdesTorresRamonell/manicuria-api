@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Cinna Nails · Turnos</title>
+  <link rel="icon" type="image/svg+xml" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Inicio">
+      <!-- LOGO: acá va tu logo. Reemplazá public/logo.svg (o cambiá el src por logo.png) -->
+      <img class="brand-logo" src="logo.png" alt="Logo de The Cinna Nails" />
+      <span class="brand-text">The Cinna Nails <small>Turnos</small></span>
+    </a>
+    <div id="sesion" class="sesion hidden">
+      <span id="saludo"></span>
+      <button id="btn-logout" class="btn btn-ghost btn-small" type="button">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="mensaje" class="mensaje hidden" role="status"></div>
+
+    <!-- Login / Registro -->
+    <section id="vista-auth" class="card card-auth">
+      <div class="auth-hero">
+        <!-- LOGO grande para la pantalla de ingreso -->
+        <img class="hero-logo" src="logo.png" alt="Logo de The Cinna Nails" />
+        <h2>¡Bienvenida!</h2>
+        <p>Reservá tu turno en pocos pasos</p>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button class="tab activo" data-tab="login" type="button" role="tab">Ingresar</button>
+        <button class="tab" data-tab="registro" type="button" role="tab">Crear cuenta</button>
+      </div>
+
+      <form id="form-login" class="form">
+        <label>Email <input type="email" name="email" required autocomplete="email" /></label>
+        <label>Contraseña <input type="password" name="password" required autocomplete="current-password" /></label>
+        <button class="btn" type="submit">Ingresar</button>
+      </form>
+
+      <form id="form-registro" class="form hidden">
+        <label>Nombre <input type="text" name="nombre" required maxlength="100" /></label>
+        <label>Email <input type="email" name="email" required autocomplete="email" /></label>
+        <label>Teléfono (opcional) <input type="tel" name="telefono" /></label>
+        <label>Contraseña <input type="password" name="password" required minlength="8" autocomplete="new-password" />
+          <small>Mínimo 8 caracteres, con letras y números.</small>
+        </label>
+        <button class="btn" type="submit">Crear cuenta</button>
+      </form>
+    </section>
+
+    <!-- App -->
+    <div id="vista-app" class="hidden">
+      <section class="card">
+        <div class="card-head">
+          <h2>Servicios</h2>
+          <button id="btn-nuevo-servicio" class="btn btn-small hidden" type="button">＋ Nuevo servicio</button>
+        </div>
+        <ul id="lista-servicios" class="servicios"></ul>
+      </section>
+
+      <section class="card">
+        <h2>Reservar un turno</h2>
+        <form id="form-turno" class="form form-grid">
+          <label>Servicio
+            <select name="servicio_id" id="select-servicio" required></select>
+          </label>
+          <label>Fecha <input type="date" name="fecha" id="input-fecha" required /></label>
+          <label>Hora
+            <span class="hora-wrap">
+              <input type="text" name="hora" id="input-hora" class="input-hora" placeholder="Elegí la hora" readonly required autocomplete="off" />
+              <span class="hora-icono" aria-hidden="true">🕒</span>
+            </span>
+          </label>
+          <label class="full">Notas (opcional) <input type="text" name="notas" maxlength="500" placeholder="Diseño, color, referencia..." /></label>
+          <button class="btn full" type="submit">Reservar</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2 id="titulo-turnos">Mis turnos</h2>
+        <div class="tabla-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th><th>Hora</th><th>Servicio</th>
+                <th class="col-admin hidden">Clienta</th>
+                <th>Estado</th><th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-turnos"></tbody>
+          </table>
+        </div>
+        <p id="sin-turnos" class="vacio hidden">Todavía no hay turnos.</p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Modal: crear / editar servicio (solo admin) -->
+  <dialog id="modal-servicio" class="modal" aria-labelledby="modal-servicio-titulo">
+    <form id="form-servicio" class="modal-card" novalidate>
+      <div class="modal-head">
+        <h3 id="modal-servicio-titulo">Nuevo servicio</h3>
+        <button type="button" class="modal-x" data-cerrar aria-label="Cerrar">✕</button>
+      </div>
+
+      <div class="modal-body form">
+        <input type="hidden" name="id" />
+        <label>Nombre
+          <input type="text" name="nombre" required maxlength="100" placeholder="Ej: Esmaltado semipermanente" />
+        </label>
+        <label>Descripción (opcional)
+          <textarea name="descripcion" rows="2" maxlength="500" placeholder="Qué incluye el servicio"></textarea>
+        </label>
+        <div class="form-grid">
+          <label>Precio (ARS)
+            <input type="number" name="precio" required min="1" step="100" inputmode="decimal" placeholder="12000" />
+          </label>
+          <label>Duración (minutos)
+            <input type="number" name="duracion_minutos" required min="5" max="480" step="5" inputmode="numeric" placeholder="60" />
+          </label>
+        </div>
+        <label class="switch">
+          <input type="checkbox" name="activo" checked />
+          <span class="switch-track" aria-hidden="true"></span>
+          <span class="switch-text">Disponible para reservar</span>
+        </label>
+        <p id="servicio-error" class="form-error hidden" role="alert"></p>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" id="btn-eliminar-servicio" class="btn btn-danger btn-small hidden">Eliminar</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn btn-soft" data-cerrar>Cancelar</button>
+        <button type="submit" class="btn">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Modal: selector de hora con reloj circular -->
+  <dialog id="modal-hora" class="modal modal-hora" aria-label="Elegir la hora">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Elegí la hora</h3>
+        <button type="button" class="modal-x" data-cerrar aria-label="Cerrar">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="clock-display">
+          <button type="button" id="clk-h" class="seg activo" aria-label="Hora">09</button>
+          <span class="clock-sep">:</span>
+          <button type="button" id="clk-m" class="seg" aria-label="Minutos">00</button>
+          <div class="ampm" role="group" aria-label="AM o PM">
+            <button type="button" id="clk-am" class="ampm-btn activo" aria-pressed="true">AM</button>
+            <button type="button" id="clk-pm" class="ampm-btn" aria-pressed="false">PM</button>
+          </div>
+        </div>
+
+        <div id="dial" class="dial" aria-label="Reloj"></div>
+
+        <p id="clk-hint" class="hint"></p>
+      </div>
+
+      <div class="modal-actions">
+        <span class="spacer"></span>
+        <button type="button" class="btn btn-soft" data-cerrar>Cancelar</button>
+        <button type="button" id="clk-ok" class="btn">Aceptar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
